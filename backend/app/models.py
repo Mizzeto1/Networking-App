@@ -17,8 +17,8 @@ class Company(Base):
     ats_type = Column(String, nullable=True)  # 'greenhouse', 'workday', 'lever', 'custom'
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    # Relationship to jobs at this company
-    jobs = relationship("Job", back_populates="company")
+    # Relationship to jobs at this company (cascade delete when company is deleted)
+    jobs = relationship("Job", back_populates="company", cascade="all, delete-orphan")
 
 
 class Job(Base):
@@ -36,7 +36,7 @@ class Job(Base):
 
     # Relationships
     company = relationship("Company", back_populates="jobs")
-    matches = relationship("Match", back_populates="job")
+    matches = relationship("Match", back_populates="job", cascade="all, delete-orphan")
 
 
 class Connection(Base):
@@ -53,8 +53,8 @@ class Connection(Base):
     is_umd_alum = Column(Boolean, default=False)
     imported_at = Column(DateTime, default=datetime.utcnow)
 
-    # Relationship to matches
-    matches = relationship("Match", back_populates="connection")
+    # Relationship to matches (cascade delete when connection is deleted)
+    matches = relationship("Match", back_populates="connection", cascade="all, delete-orphan")
 
 
 class Alumni(Base):
@@ -71,8 +71,8 @@ class Alumni(Base):
     school = Column(String, default="University of Maryland")
     discovered_at = Column(DateTime, default=datetime.utcnow)
 
-    # Relationship to matches
-    matches = relationship("Match", back_populates="alumni")
+    # Relationship to matches (cascade delete when alumni is deleted)
+    matches = relationship("Match", back_populates="alumni", cascade="all, delete-orphan")
 
 
 class Match(Base):
